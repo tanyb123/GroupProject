@@ -187,12 +187,12 @@ Browser → SSH Tunnel (localhost:4000) → Control Panel Backend (4000)
 ## 1. Bring up YAS (application host `192.168.100.10`)
 1. SSH:
    ```bash
-   sshpass -p '27022004' ssh thethinh@192.168.100.10
+   sshpass -p 'password' ssh thethinh@192.168.100.10
    ```
 2. Start the docker compose stack (needs sudo):
    ```bash
    cd ~/yas-main
-   echo 27022004 | sudo -S docker compose -f docker-compose.yml up -d
+   echo password | sudo -S docker compose -f docker-compose.yml up -d
    ```
 3. Verify:
    ```bash
@@ -202,19 +202,19 @@ Browser → SSH Tunnel (localhost:4000) → Control Panel Backend (4000)
 ## 2. Configure nginx + ModSecurity (bastion `100.101.119.23`)
 1. Install packages (already done once):
    ```bash
-   echo 27022004 | sudo -S apt install -y \
+   echo password | sudo -S apt install -y \
      nginx libnginx-mod-http-modsecurity libnginx-mod-http-ndk modsecurity-crs
    ```
 2. Prepare ModSecurity files:
    ```bash
-   echo 27022004 | sudo -S mkdir -p /etc/nginx/modsec
-   echo 27022004 | sudo -S cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
-   echo 27022004 | sudo -S sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf
-   echo 27022004 | sudo -S cp /etc/nginx/unicode.mapping /etc/nginx/modsec/unicode.mapping
+   echo password | sudo -S mkdir -p /etc/nginx/modsec
+   echo password | sudo -S cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
+   echo password | sudo -S sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/' /etc/nginx/modsec/modsecurity.conf
+   echo password | sudo -S cp /etc/nginx/unicode.mapping /etc/nginx/modsec/unicode.mapping
    ```
 3. Include CRS:
    ```bash
-   echo 27022004 | sudo -S bash -c 'cat <<EOF > /etc/nginx/modsec/main.conf
+   echo password | sudo -S bash -c 'cat <<EOF > /etc/nginx/modsec/main.conf
    Include /etc/nginx/modsec/modsecurity.conf
    Include /etc/nginx/modsec/coreruleset/crs-setup.conf
    Include /etc/nginx/modsec/coreruleset/rules/*.conf
@@ -244,14 +244,14 @@ Browser → SSH Tunnel (localhost:4000) → Control Panel Backend (4000)
      ```
    - Enable sites:
      ```bash
-     echo 27022004 | sudo -S ln -sf /etc/nginx/sites-available/storefront-waf /etc/nginx/sites-enabled/storefront-waf
-     echo 27022004 | sudo -S ln -sf /etc/nginx/sites-available/yas-project /etc/nginx/sites-enabled/yas-project
-     echo 27022004 | sudo -S rm -f /etc/nginx/sites-enabled/default
+     echo password | sudo -S ln -sf /etc/nginx/sites-available/storefront-waf /etc/nginx/sites-enabled/storefront-waf
+     echo password | sudo -S ln -sf /etc/nginx/sites-available/yas-project /etc/nginx/sites-enabled/yas-project
+     echo password | sudo -S rm -f /etc/nginx/sites-enabled/default
      ```
 5. Validate & restart:
    ```bash
-   echo 27022004 | sudo -S nginx -t
-   echo 27022004 | sudo -S systemctl restart nginx
+   echo password | sudo -S nginx -t
+   echo password | sudo -S systemctl restart nginx
    ```
 
 ## 3. ModSecurity Control Panel (backend + UI)
@@ -263,7 +263,7 @@ Located in `~/modsec-panel`.
    npm install
    echo "PORT=4000" > .env   # plus MODSEC paths as in README
    # create systemd service (modsec-panel.service) as described in README_modsecurity.md
-   echo 27022004 | sudo -S systemctl enable --now modsec-panel.service
+   echo password | sudo -S systemctl enable --now modsec-panel.service
    ```
    This exposes `http://100.101.119.23:4000/api/...` for status/config/logs.
 
@@ -295,7 +295,7 @@ Each bot must have:
 - `/etc/hosts` entries mapping `storefront`, `api.yas.local` to `127.0.0.1`.
 - An SSH tunnel to the bastion:
   ```bash
-  sshpass -p '27022004' ssh -L 8080:192.168.100.10:80 thethinh@100.101.119.23
+  sshpass -p 'password' ssh -L 8080:192.168.100.10:80 thethinh@100.101.119.23
   ```
 Keep tunnel terminals open while missions run.
 
@@ -309,7 +309,7 @@ Keep tunnel terminals open while missions run.
    ```
 2. Open tunnel:
    ```bash
-   sshpass -p '27022004' ssh -L 8080:192.168.100.10:80 thethinh@100.101.119.23
+   sshpass -p 'password' ssh -L 8080:192.168.100.10:80 thethinh@100.101.119.23
    ```
 3. Browse `http://storefront:8080/` to reach the WAF-protected site.
 
